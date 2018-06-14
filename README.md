@@ -1,5 +1,6 @@
 # Modelling one-class classifiers to thwart cyber-attacks in the IoT space
 #### By Harsha Kumara Kalutarage, Bhargav Mitra and Robert McCausland
+=======
 
 The Internet of Things (IoT) refers to smart paraphernalia, sensor-embedded devices connected to the internet. An IoT device can be any thing from a home door-bell to an aeroplane. The digital age — we are in — is witnessing monstrous waves of such devices battering the consumer and business markets on a daily-basis and according to Business Insider UK, there will be 55 billion of IoT-devices in use by 2025. The industry is also expecting a boom — $15 trillion in aggregate investment between 2017 – 2025.  These figures  bring to the picture the promise of profit-potential opportunities, they also carry the realistic threat of expansion of cyber-attack surface. A network of such devices — a BotNet —- can be compromised to cause service-outage or to steal information from your PC. The Distributed Denial-of-Service (DDoS) attack against Dyn Domain-Name-Server in 2016 that used a network of 100,000 odd IoT-devices, driven by a virus called Mirai (Linux. Gafgyt), bear testimony to this account.
 
@@ -16,10 +17,3 @@ The code, written in R, is presented below. The R packages — readr, kernlab, c
 # Data preparation
 
 Quality of input-data (ingredients) determines the quality of output of any ML algorithm. Therefore, understanding the data and the context, and cleaning and preparation of the data [for model construction] are critical steps that should be followed before initiating the process of modelling. However, in this post and as mentioned before, we assume that the data — after some basic cleaning — is ready for modelling; in other words, the scope of this post is limited to the demonstration of a mechanism to build one-class classifiers.
-=======
-<<<<<<< HEAD
-# Modelling one-class classifiers to thwart cyber-attacks in the IoT space
-=======
-# IoT-Security
->>>>>>> 97dce1bde819001ab53d5a5b67ff046ecf78cc29
->>>>>>> 094c519af4b902bf469e6e13c92ebcbb326451a5
