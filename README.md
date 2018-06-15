@@ -17,3 +17,53 @@ The code, written in R, is presented below. The R packages — readr, kernlab, c
 # Data preparation
 
 Quality of input-data determines the quality of output of any ML algorithm. Therefore, understanding the data and the context, and cleaning and preparation of the data [for model construction] are critical steps that should be followed before initiating the process of modelling. However, in this post and as mentioned before, we assume that the data — after some basic cleaning — is ready for modelling; in other words, the scope of this post is limited to the demonstration of a mechanism to build one-class classifiers.
+
+```R
+library(readr) # provides a fast and friendly way to read csv data
+benginDataset<- read_csv("path_to_benign_traffic.csv") # load the benign traffic data
+
+# A function to load multiple .CSV files in a directory
+
+
+loadData<-function(dirPath){
+dirPath<- directory.path
+fileList <- list.files(dirPath, pattern=".csv",full.names = TRUE)
+for (eachFile in fileList){
+if (!exists("tmpDataset")){
+tmpDataset <- read.csv(eachFile,header = T)
+} else if (exists("tmpDataset")){
+tempData <-read.csv(eachFile,header = T)
+tmpDataset<-rbind(tmpDataset, tempData)
+}}
+return(tmpDataset)
+}
+
+# Load the gafgyt data, note that gafgyt directory contains multiple csv files  reflecting the components of a transaction , namely, combo.csv, junk.csv, scan.csv, tcp.csv and udp.csv
+
+
+directory.path<- "directory_path_to_gafgyt_attack_csv_files"
+gafgytDataset<-loadData(directory.path)
+
+# Similarly load the mirai traffic data
+directory.path<-"directory_path_to_mirai_attack_csv_files”
+miraiDataset<-loadData(directory.path)
+
+# Removing records in the dataset that contain NAs
+benginDataset<-benginDataset[complete.cases(benginDataset), ]
+gafgytDataset<-gafgytDataset[complete.cases(gafgytDataset), ]
+miraiDataset<-miraiDataset[complete.cases(miraiDataset), ]
+
+
+# Adding labels to the data, benign traffic is marked as TRUE, and malicious traffic as FALSE
+benginDataset$Type<-TRUE
+gafgytDataset$Type<-FALSE
+miraiDataset$Type<-FALSE
+
+
+# Preparing the dataset, splitting at random the benign dataset into two subsets --- one with 80% of the instances for training, and another with the remaining 20%; the remaining 20% is merged with malicious instances for testing
+index <- 1:nrow(benginDataset)
+testIndex <- sample(index, trunc(length(index)*20/100))
+testSetBen <- benginDataset[testIndex,] # Create the Benign class for testing
+testSet <- rbind(gafgytDataset,miraiDataset,testSetBen) # Pool the benign test instances with malicious instances to create the final testing dataset
+trainSet <- benginDataset[-testIndex,] # Create the training set, this set contains benign instances only
+```
