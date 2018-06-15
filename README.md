@@ -60,7 +60,6 @@ miraiDataset<-loadData(directory.path)
 unlink(temp_file1)
 unlink(temp_file2)
 
-
 # Removing records in the dataset that contain NAs
 benginDataset<-benginDataset[complete.cases(benginDataset), ]
 gafgytDataset<-gafgytDataset[complete.cases(gafgytDataset), ]
@@ -87,17 +86,18 @@ The idea here is to create the model only using benign instances, and then use t
 Two one-class classifiers and their corresponding families to be used in this exercise are as follows:
 
 
-    *[One Class Support Vector Machine (OCSVM)](http://papers.nips.cc/paper/1723-support-vector-method-for-novelty-detection.pdf) from the typical ML family
+    ..*[One Class Support Vector Machine](http://papers.nips.cc/paper/1723-support-vector-method-for-novelty-detection.pdf) from the typical ML family
 
-    *[Autoencoder from the deep learning family](https://web.stanford.edu/class/cs294a/sparseAutoencoder_2011new.pdf)
+    ..*[Autoencoder from the deep learning family](https://web.stanford.edu/class/cs294a/sparseAutoencoder_2011new.pdf)
 
+## Using One Class Support Vector Machine(OCSVM)
 R code snippet for training the OCSVM
 ```R
 library(kernlab)
 fit <- ksvm(Type~., data=trainSet, type="one-svc", kernel="rbfdot", kpar="automatic")
 print(fit) # To print model details
 ```
-## Model evaluation (OCSVM)
+### Model evaluation (OCSVM)
 
 The above model was then applied to the testSet, and the performance measured using a confusion-matrix. As demonstrated through the Confusion Matrix and other statistics, 99.85% accuracy can be achieved using the OCSVM and the initial feature set.
 
@@ -119,7 +119,8 @@ data<-trainSet[,-116] # Take a copy of training data without labels
 trainH2o<-as.h2o(data, destination_frame="trainH2o.hex") # Convert data to h20 compatible format
 ```
 
-*####* Building a deep autoencoder learning model using trainH2o, i.e. only using "benign" instances, and using “Bottleneck” training with random choice of number of hidden layers
+*Building a deep autoencoder learning model using trainH2o, i.e. only using "benign" instances, and using “Bottleneck” training with random choice of number of hidden layers*
+
 ```R
 train.IoT <- h2o.deeplearning(x = names(trainH2o), training_frame = trainH2o, activation = "Tanh", autoencoder = TRUE, hidden = c(50,2,50), l1 = 1e-4, epochs = 100, variable_importances=T, model_id = "train.IoT", reproducible = TRUE, ignore_const_cols = FALSE, seed = 123)
 h2o.saveModel(train.IoT, path="train.IoT", force = TRUE) # Better to save the model as it may take time to train it – depends on the performance of your machine
