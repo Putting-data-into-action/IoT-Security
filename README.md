@@ -85,9 +85,9 @@ The idea here is to create the model only using benign instances, and then use t
 
 Two one-class classifiers and their corresponding families to be used in this exercise are as follows:
 
-..*[One Class Support Vector Machine](http://papers.nips.cc/paper/1723-support-vector-method-for-novelty-detection.pdf) from the typical ML family
+..* [One Class Support Vector Machine](http://papers.nips.cc/paper/1723-support-vector-method-for-novelty-detection.pdf) from the typical ML family
 
-..*[Autoencoder from the deep learning family](https://web.stanford.edu/class/cs294a/sparseAutoencoder_2011new.pdf)
+..* [Autoencoder from the deep learning family](https://web.stanford.edu/class/cs294a/sparseAutoencoder_2011new.pdf)
 
 ## Using One Class Support Vector Machine(OCSVM)
 R code snippet for training the OCSVM
