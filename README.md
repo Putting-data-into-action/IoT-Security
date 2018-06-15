@@ -84,8 +84,10 @@ In many security problems, it is relatively easy to gather training instances of
 The idea here is to create the model only using benign instances, and then use the trained model to identify new/unknown instances of the traffic using statistical and machine-learning approaches. If the target-data is too different, according to some measurement, it is labelled as out-of-class. To this end and for the purpose of demonstration, we will show in this post how to spot-check one-class classifiers — belonging to different families --in terms of performance.
 
 Two one-class classifiers and their corresponding families to be used in this exercise are as follows:
-*[One Class Support Vector Machine](http://papers.nips.cc/paper/1723-support-vector-method-for-novelty-detection.pdf) from the typical ML family
-*[Autoencoder from the deep learning family](https://web.stanford.edu/class/cs294a/sparseAutoencoder_2011new.pdf)
+
+..*[One Class Support Vector Machine](http://papers.nips.cc/paper/1723-support-vector-method-for-novelty-detection.pdf) from the typical ML family
+
+..*[Autoencoder from the deep learning family](https://web.stanford.edu/class/cs294a/sparseAutoencoder_2011new.pdf)
 
 ## Using One Class Support Vector Machine(OCSVM)
 R code snippet for training the OCSVM
