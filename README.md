@@ -20,29 +20,46 @@ Quality of input-data determines the quality of output of any ML algorithm. Ther
 
 ```R
 library(readr) # provides a fast and friendly way to read csv data
-benginDataset<- read_csv("path_to_benign_traffic.csv") # load the benign traffic data
 
 # A function to load multiple .CSV files in a directory
 loadData<-function(dirPath){ 
-dirPath<- directory.path
-fileList <- list.files(dirPath, pattern=".csv",full.names = TRUE)
-for (eachFile in fileList){
-if (!exists("tmpDataset")){
-tmpDataset <- read.csv(eachFile,header = T)
-} else if (exists("tmpDataset")){
-tempData <-read.csv(eachFile,header = T)
-tmpDataset<-rbind(tmpDataset, tempData)
-}}
-return(tmpDataset)
+  dirPath<- directory.path
+  fileList <- list.files(dirPath, pattern=".csv",full.names = TRUE)
+  for (eachFile in fileList){
+    if (!exists("tmpDataset")){
+      tmpDataset <- read.csv(eachFile,header = T)
+    } else if (exists("tmpDataset")){
+      tempData <-read.csv(eachFile,header = T)
+      tmpDataset<-rbind(tmpDataset, tempData)
+    }}
+  return(tmpDataset)
 }
 
-# Load the gafgyt data, note that gafgyt directory contains multiple csv files  reflecting the components of a transaction , namely, combo.csv, junk.csv, scan.csv, tcp.csv and udp.csv
-directory.path<- "directory_path_to_gafgyt_attack_csv_files"
-gafgytDataset<-loadData(directory.path)
+# Load the benign traffic data from the publisher location
+benginDataset<- read_csv("https://archive.ics.uci.edu/ml/machine-learning-databases/00442/Danmini_Doorbell/bengin_traffic.csv")
 
-# Similarly load the mirai traffic data
-directory.path<-"directory_path_to_mirai_attack_csv_files”
+# Download, .RARs that contains malicious traffic from the publisher location, and extract and read data
+devtools::install_github("jimhester/archive") # install archive package
+library(archive)
+
+temp_file1 <- tempfile(fileext = ".rar")
+download.file("https://archive.ics.uci.edu/ml/machine-learning-databases/00442/Danmini_Doorbell/gafgyt_attacks.rar", temp_file1) # Load the gafgyt data
+temp_file2 <- tempfile()
+archive_extract(temp_file1, temp_file2)
+directory.path<-temp_file2
+gafgytDataset<-loadData(directory.path)
+unlink(temp_file1)
+unlink(temp_file2)
+
+temp_file1 <- tempfile(fileext = ".rar")
+download.file("https://archive.ics.uci.edu/ml/machine-learning-databases/00442/Danmini_Doorbell/mirai_attacks.rar", temp_file1) # Load the mirai traffic data
+temp_file2 <- tempfile()
+archive_extract(temp_file1, temp_file2)
+directory.path<-temp_file2
 miraiDataset<-loadData(directory.path)
+unlink(temp_file1)
+unlink(temp_file2)
+
 
 # Removing records in the dataset that contain NAs
 benginDataset<-benginDataset[complete.cases(benginDataset), ]
@@ -102,7 +119,7 @@ data<-trainSet[,-116] # Take a copy of training data without labels
 trainH2o<-as.h2o(data, destination_frame="trainH2o.hex") # Convert data to h20 compatible format
 ```
 
-#### Building a deep autoencoder learning model using trainH2o, i.e. only using "benign" instances, and using “Bottleneck” training with random choice of number of hidden layers
+*####* Building a deep autoencoder learning model using trainH2o, i.e. only using "benign" instances, and using “Bottleneck” training with random choice of number of hidden layers
 ```R
 train.IoT <- h2o.deeplearning(x = names(trainH2o), training_frame = trainH2o, activation = "Tanh", autoencoder = TRUE, hidden = c(50,2,50), l1 = 1e-4, epochs = 100, variable_importances=T, model_id = "train.IoT", reproducible = TRUE, ignore_const_cols = FALSE, seed = 123)
 h2o.saveModel(train.IoT, path="train.IoT", force = TRUE) # Better to save the model as it may take time to train it – depends on the performance of your machine
