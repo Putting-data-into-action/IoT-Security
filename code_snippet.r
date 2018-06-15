@@ -49,7 +49,7 @@ benginDataset$Type<-TRUE
 gafgytDataset$Type<-FALSE
 miraiDataset$Type<-FALSE
 
-# Preparing the dataset, splitting at random the benign dataset into two subsets --- one with 80% of the instances for training, and another with the remaining 20%; the remaining 20% is merged with malicious instances for testing
+# Preparing the dataset, split at random the benign dataset into two subsets --- one with 80% of the instances for training, and another with the remaining 20%; the remaining 20% is merged with malicious instances for testing
 index <- 1:nrow(benginDataset)
 testIndex <- sample(index, trunc(length(index)*20/100))
 testSetBen <- benginDataset[testIndex,] # Create the Benign class for testing
@@ -76,5 +76,21 @@ trainH2o<-as.h2o(data, destination_frame="trainH2o.hex") # Convert data to h20 c
 # Building a deep autoencoder learning model using trainH2o, i.e. only using "benign" instances, and using “Bottleneck” training with random choice of number of hidden layers
 train.IoT <- h2o.deeplearning(x = names(trainH2o), training_frame = trainH2o, activation = "Tanh", autoencoder = TRUE, hidden = c(50,2,50), l1 = 1e-4, epochs = 100, variable_importances=T, model_id = "train.IoT", reproducible = TRUE, ignore_const_cols = FALSE, seed = 123)
 h2o.saveModel(train.IoT, path="train.IoT", force = TRUE) # Better to save the model as it may take time to train it – depends on the performance of your machine
-train.IoT <- h2o.loadModel("path_to_the_working_directory/train.IoT/train.IoT") # load the model
+train.IoT <- h2o.loadModel("./train.IoT/train.IoT") # load the model
 train.IoT # To print model details
+
+train.anon = h2o.anomaly(train.IoT, trainH2o, per_feature=FALSE) # calculate MSE across training observations
+head(train.anon) # Print a sample of MSE values
+err <- as.data.frame(train.anon)
+plot(sort(err[,1]), main='Reconstruction Error',xlab="Row index", ylab="Reconstruction.MSE",col="orange")
+
+threshold<-0.02 # Define the threshold based on Reconstruction.MSE of training
+
+train.IoT <- h2o.loadModel("./train.IoT/train.IoT") # load the model
+newtestSet<-testSet[sample(nrow(testSet), 976829 %/% 2), ] # Here we select randomly 50% records of test instances due to the memory limitation of our computer, this step not necessary if you have enough memory on your machine / or run this section multiple times, and summarise (average) the results to approximate the accuracy if your computer has low computationally resources
+data<-newtestSet[,-116] # remove labels from the test data frame
+testH2o<-as.h2o(data, destination_frame="trainH2o.hex") #convert data to h20 compatible
+test.anon = h2o.anomaly(train.IoT,testH2o, per_feature=FALSE) # calculate MSE across observations
+err <- as.data.frame(test.anon)
+prediction <- err$Reconstruction.MSE<=threshold
+confusionMatrix(data=as.factor(prediction),reference=as.factor(newtestSet$Type)) # summarize the accuracy
