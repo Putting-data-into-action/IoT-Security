@@ -87,7 +87,15 @@ Two one-class classifiers and their corresponding families to be used in this ex
 
 - [One Class Support Vector Machine](http://papers.nips.cc/paper/1723-support-vector-method-for-novelty-detection.pdf) from the typical ML family.
 
+<<<<<<< HEAD
 - [Autoencoder](https://web.stanford.edu/class/cs294a/sparseAutoencoder_2011new.pdf) from the deep learning family.
+=======
+<<<<<<< HEAD
+- [Autoencoder](https://web.stanford.edu/class/cs294a/sparseAutoencoder_2011new.pdf) from the deep learning family.
+=======
+- [Autoencoder from the deep learning family](https://web.stanford.edu/class/cs294a/sparseAutoencoder_2011new.pdf).
+>>>>>>> ff67ea7cab20ba0b077a62aa0eb382781378a596
+>>>>>>> 87382c5643f7ec015bf627752b39597035a5fd60
 
 ## Using One Class Support Vector Machine(OCSVM)
 R code snippet for training the OCSVM
