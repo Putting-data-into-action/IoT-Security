@@ -152,6 +152,9 @@ err <- as.data.frame(test.anon)
 prediction <- err$Reconstruction.MSE<=threshold
 confusionMatrix(data=as.factor(prediction),reference=as.factor(newtestSet$Type)) # summarize the accuracy
 ```
+Confusion Matrix: 
+![alt text](./Images/autoencod_confusion.jpg "Confusion Matrix")
+
 ## Some final insights
 
 Two points here.
