@@ -87,15 +87,7 @@ Two one-class classifiers and their corresponding families to be used in this ex
 
 - [One Class Support Vector Machine](http://papers.nips.cc/paper/1723-support-vector-method-for-novelty-detection.pdf) from the typical ML family.
 
-<<<<<<< HEAD
 - [Autoencoder](https://web.stanford.edu/class/cs294a/sparseAutoencoder_2011new.pdf) from the deep learning family.
-=======
-<<<<<<< HEAD
-- [Autoencoder](https://web.stanford.edu/class/cs294a/sparseAutoencoder_2011new.pdf) from the deep learning family.
-=======
-- [Autoencoder from the deep learning family](https://web.stanford.edu/class/cs294a/sparseAutoencoder_2011new.pdf).
->>>>>>> ff67ea7cab20ba0b077a62aa0eb382781378a596
->>>>>>> 87382c5643f7ec015bf627752b39597035a5fd60
 
 ## Using One Class Support Vector Machine(OCSVM)
 R code snippet for training the OCSVM
@@ -113,6 +105,9 @@ library(caret)
 predictions <- predict(fit, testSet[,1:(ncol(testSet)-1)], type="response") # make predictions
 confusionMatrix(data=as.factor(predictions),reference=as.factor(testSet$Type)) # summarize the accuracy
 ```
+Confusion Matrix: 
+![alt text](./Images/svm_confusion.jpg "Confusion Matrix")
+
 ## Using Autoencoder as one-class classifier
 
 Here we use a technique called “Bottleneck” training, designing a deep neural-network architecture imposing a bottleneck in the hidden layers, which forces to learn a compressed knowledge representation (encoding) for the dataset. If input features, in terms of their values, were independent of each other this compression and subsequent reconstruction would be a difficult task. However, if some sort of structure (i.e. linear/non-linear correlations) exists in the data, this structure can be learned and consequently leveraged when forcing the input through the network’s bottleneck. So, our hypothesis in this modelling task will be “benign instances have some sort of structure which is different from the structure of the malicious instances”, and this structure can be learned and modelled using an Autoencoder model.
@@ -142,6 +137,8 @@ head(train.anon) # Print a sample of MSE values
 err <- as.data.frame(train.anon)
 plot(sort(err[,1]), main='Reconstruction Error',xlab="Row index", ylab="Reconstruction.MSE",col="orange")
 ```
+Error Plot: 
+![alt text](./Images/reconErrors.jpg "Error Plot")
 
 As we can see in the plot, the Autoencoder struggles from index ~32,200 onwards as the error count accelerates upwards. We can determine that the model recognizes patterns in the first 32,200 observations that it can’t see as easily in the last ~300. This information can be used to define the decision boundary for novelty detection assuming that last ~300 instances are outliers with respect to the rest of instances in the benign dataset. Hence we will define the decision boundary (threshold), in terms of Reconstruction.MSE, as 0.02 for the benign class.
 ```R
