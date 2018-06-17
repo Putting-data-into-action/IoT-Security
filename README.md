@@ -21,9 +21,8 @@ Quality of input-data determines the quality of output of any ML algorithm. Ther
 ```R
 library(readr) # provides a fast and friendly way to read csv data
 
-# A function to load multiple .CSV files in a directory
+# A function to load multiple .CSV files from a directory
 loadData<-function(dirPath){ 
-  dirPath<- directory.path
   fileList <- list.files(dirPath, pattern=".csv",full.names = TRUE)
   for (eachFile in fileList){
     if (!exists("tmpDataset")){
@@ -38,7 +37,7 @@ loadData<-function(dirPath){
 # Load the benign traffic data from the publisher location
 benginDataset<- read_csv("https://archive.ics.uci.edu/ml/machine-learning-databases/00442/Danmini_Doorbell/bengin_traffic.csv")
 
-# Download, .RARs that contains malicious traffic from the publisher location, and extract and read data
+# Download, .RARs that contain malicious traffic from the publisher location, extract and read data
 devtools::install_github("jimhester/archive") # install archive package
 library(archive)
 
@@ -46,8 +45,7 @@ temp_file1 <- tempfile(fileext = ".rar")
 download.file("https://archive.ics.uci.edu/ml/machine-learning-databases/00442/Danmini_Doorbell/gafgyt_attacks.rar", temp_file1) # Load the gafgyt data
 temp_file2 <- tempfile()
 archive_extract(temp_file1, temp_file2)
-directory.path<-temp_file2
-gafgytDataset<-loadData(directory.path)
+gafgytDataset<-loadData(temp_file2)
 unlink(temp_file1)
 unlink(temp_file2)
 
@@ -55,8 +53,7 @@ temp_file1 <- tempfile(fileext = ".rar")
 download.file("https://archive.ics.uci.edu/ml/machine-learning-databases/00442/Danmini_Doorbell/mirai_attacks.rar", temp_file1) # Load the mirai traffic data
 temp_file2 <- tempfile()
 archive_extract(temp_file1, temp_file2)
-directory.path<-temp_file2
-miraiDataset<-loadData(directory.path)
+miraiDataset<-loadData(temp_file2)
 unlink(temp_file1)
 unlink(temp_file2)
 
@@ -169,3 +166,9 @@ First, we see that in this experiment, there is a heavy imbalance among distinct
 Second, the models built in this exercise are nor perpetual models of normality for the Danmini Doorbell traffic data. It should be borne in mind that within the IT-security context, we have to assume the condition of adversarial setting — both defenders as well as attackers would be improving their techniques over time. This means that both normal traffic and malicious traffic would change over time rendering our models obsolete. The fact that the models — built in this exercise — come with expiry-dates is part of the concept-drift phenomenon in Data-Science and Machine Learning. We hope to discuss these aspects of using Data Science and Machine learning for Cyber Security in a different post in the future.
 
 **Keywords: IoT-security; one-class classifiers; autoencoders.**
+
+**Citation Request**
+If you found this post and the R code snippet provided are useful, please be kind enough to cite our related article in your work:
+Kalutarage, H., Mitra, B., & McCausland, R. (2018). Modelling IoT Anomoly Detection. ITNow, 60(3), 44-45.
+
+Also note that there is a citation request from the dataset publisher at https://archive.ics.uci.edu/ml/datasets/detection_of_IoT_botnet_attacks_N_BaIoT
