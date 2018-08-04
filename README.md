@@ -166,9 +166,8 @@ First, we see that in this experiment, there is a heavy imbalance among distinct
 Second, the models built in this exercise are nor perpetual models of normality for the Danmini Doorbell traffic data. It should be borne in mind that within the IT-security context, we have to assume the condition of adversarial setting — both defenders as well as attackers would be improving their techniques over time. This means that both normal traffic and malicious traffic would change over time rendering our models obsolete. The fact that the models — built in this exercise — come with expiry-dates is part of the concept-drift phenomenon in Data-Science and Machine Learning. We hope to discuss these aspects of using Data Science and Machine learning for Cyber Security in a different post in the future.
 
 **Keywords: IoT-security; one-class classifiers; autoencoders.**
-
-**Citation Request**
-If you found this post and the R code snippet provided are useful, please be kind enough to cite our related article in your work:
-Kalutarage, H., Mitra, B., & McCausland, R. (2018). Modelling IoT Anomoly Detection. ITNow, 60(3), 44-45.
+---
+**Citation requests**
+If you found this post and/or the R code snippet provided to be useful, please be kind enough to cite below article in your work: <br/> Kalutarage, H., Mitra, B., & McCausland, R. (2018). Modelling IoT Anomoly Detection. ITNow, 60(3), 44-45.
 
 Also note that there is a citation request from the dataset publisher at https://archive.ics.uci.edu/ml/datasets/detection_of_IoT_botnet_attacks_N_BaIoT
